@@ -36,8 +36,6 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql'
     testImplementation group: 'org.spockframework', name: 'spock-core', version: '2.0-groovy-3.0'
     testImplementation group: 'org.spockframework', name: 'spock-spring', version: '2.0-groovy-3.0'
-
-
 }
 
 dependencyManagement {
@@ -46,6 +44,9 @@ dependencyManagement {
     }
 }
 
-test {
-    useJUnitPlatform()
+task local {
+    bootRun { systemProperty 'spring.profiles.active', 'local' }
 }
+
+bootRun.mustRunAfter local
+
