@@ -1,12 +1,13 @@
 package com.example.github
 
-
+import com.example.github.adapters.db.RequestStatisticsRepository
 import com.example.github.adapters.rest.UserDetailsController
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.web.client.ExpectedCount
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
@@ -22,12 +23,14 @@ class GithubApplicationTest extends Specification {
     private RestTemplate restTemplate
     @Autowired
     private TestRestTemplate testRestTemplate
-
+    @Autowired
+    private RequestStatisticsRepository requestStatisticsRepository
 
     private MockRestServiceServer mockServer
 
     def setup() {
         mockServer = MockRestServiceServer.createServer(restTemplate)
+        requestStatisticsRepository.deleteAll()
     }
 
     def "Should return correct response for given Github user and increase statistics in the DB"() {
@@ -35,14 +38,12 @@ class GithubApplicationTest extends Specification {
         def login = "someUser"
 
         and: "Github API responds with user details and 200 status"
-        mockServer.expect(requestTo(new URI("http://localhost:8300/users/${login}")))
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8300/users/${login}")))
                   .andRespond(withSuccess(correctUsersResponse(), MediaType.APPLICATION_JSON))
 
         when: "GET request to /users/{login} endpoint is sent"
-        def response = testRestTemplate.
-                getForEntity("/users/{login}",
-                             UserDetailsController.UserDetailsResponse,
-                             login).getBody()
+        def response = testRestTemplate.getForEntity("/users/{login}", UserDetailsController.UserDetailsResponse, login)
+                                       .getBody()
 
         then: "The correct response is returned"
         response.id == 17217123
@@ -54,7 +55,36 @@ class GithubApplicationTest extends Specification {
         response.calculations == 84.0
     }
 
-    //    todo: add test for not found
+    def "Should create and increase request statistics after request is made"() {
+        given: "User's login with no statistics"
+        def login = "someUser"
+        def statistics = requestStatisticsRepository.findByLogin(login)
+        assert statistics.isEmpty()
+
+        and: "Github API responds with user details and 200 status"
+        mockServer.expect(ExpectedCount.twice(), requestTo(new URI("http://localhost:8300/users/${login}")))
+                  .andRespond(withSuccess(correctUsersResponse(), MediaType.APPLICATION_JSON))
+
+        when: "GET request to /users/{login} endpoint is sent"
+        testRestTemplate.getForEntity("/users/{login}", UserDetailsController.UserDetailsResponse, login).getBody()
+
+        then: "The statistics are created with initial value"
+        def createdStatistics = requestStatisticsRepository.findByLogin(login)
+                                                           .get()
+        createdStatistics.login == login
+        createdStatistics.requestCount == 1
+
+        when: "Another request is made"
+        testRestTemplate.getForEntity("/users/{login}", UserDetailsController.UserDetailsResponse, login).getBody()
+
+        then: "The statistics are increased by 1"
+        def increasedStatistics = requestStatisticsRepository.findByLogin(login)
+                                                             .get()
+        increasedStatistics.login == login
+        increasedStatistics.requestCount == 2
+    }
+
+    //    todo: add test for not found and division by zero
 
 
     private static String correctUsersResponse() {
