@@ -1,4 +1,4 @@
-package com.example.github.adapters.rest.api;
+package com.empik.github.adapters.rest.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

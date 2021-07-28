@@ -1,4 +1,4 @@
-package com.example.github;
+package com.empik.github;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

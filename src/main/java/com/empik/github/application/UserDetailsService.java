@@ -1,14 +1,14 @@
-package com.example.github.application;
+package com.empik.github.application;
 
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import com.example.github.adapters.db.RequestStatisticsEntity;
-import com.example.github.adapters.db.RequestStatisticsRepository;
-import com.example.github.adapters.rest.client.GithubRestClient;
-import com.example.github.adapters.rest.client.GithubUserDetailsResponse;
-import com.example.github.domain.User;
+import com.empik.github.adapters.rest.client.GithubRestClient;
+import com.empik.github.domain.User;
+import com.empik.github.adapters.db.RequestStatisticsEntity;
+import com.empik.github.adapters.db.RequestStatisticsRepository;
+import com.empik.github.adapters.rest.client.GithubUserDetailsResponse;
 
 import java.util.function.Consumer;
 

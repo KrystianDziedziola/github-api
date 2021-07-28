@@ -1,4 +1,4 @@
-package com.example.github.adapters.rest.api;
+package com.empik.github.adapters.rest.api;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;

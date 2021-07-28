@@ -1,4 +1,4 @@
-package com.example.github.adapters.db;
+package com.empik.github.adapters.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

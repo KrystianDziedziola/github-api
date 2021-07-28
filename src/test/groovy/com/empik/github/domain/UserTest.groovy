@@ -1,4 +1,4 @@
-package com.example.github.domain
+package com.empik.github.domain
 
 import spock.lang.Specification
 

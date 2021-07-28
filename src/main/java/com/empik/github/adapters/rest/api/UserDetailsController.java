@@ -1,4 +1,4 @@
-package com.example.github.adapters.rest.api;
+package com.empik.github.adapters.rest.api;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.example.github.application.UserDetailsService;
-import com.example.github.domain.CalculationsException;
-import com.example.github.domain.User;
+import com.empik.github.application.UserDetailsService;
+import com.empik.github.domain.CalculationsException;
+import com.empik.github.domain.User;
 
 import java.net.URL;
 import java.time.OffsetDateTime;

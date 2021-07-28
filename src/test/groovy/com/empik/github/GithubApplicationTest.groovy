@@ -1,7 +1,7 @@
-package com.example.github
+package com.empik.github
 
-import com.example.github.adapters.db.RequestStatisticsRepository
-import com.example.github.adapters.rest.UserDetailsController
+import com.empik.github.adapters.db.RequestStatisticsRepository
+import com.empik.github.adapters.rest.api.UserDetailsController
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -83,9 +83,6 @@ class GithubApplicationTest extends Specification {
         increasedStatistics.login == login
         increasedStatistics.requestCount == 2
     }
-
-    //    todo: add test for not found and division by zero
-
 
     private static String correctUsersResponse() {
         return """

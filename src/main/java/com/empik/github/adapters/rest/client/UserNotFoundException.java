@@ -1,4 +1,4 @@
-package com.example.github.adapters.rest.client;
+package com.empik.github.adapters.rest.client;
 
 import java.text.MessageFormat;
 

@@ -1,4 +1,4 @@
-package com.example.github;
+package com.empik.github;
 
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;

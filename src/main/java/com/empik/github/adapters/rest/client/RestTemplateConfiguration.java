@@ -1,4 +1,4 @@
-package com.example.github.adapters.rest.client;
+package com.empik.github.adapters.rest.client;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
