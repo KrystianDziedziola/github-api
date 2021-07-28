@@ -1,15 +1,19 @@
-package com.example.github.adapters.rest;
+package com.example.github.adapters.rest.api;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.example.github.application.UserDetailsService;
 import com.example.github.domain.CalculationsException;
@@ -20,21 +24,29 @@ import java.time.OffsetDateTime;
 
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-//todo: swagger
-//@Api(tags = "", value = "")
 @AllArgsConstructor
 class UserDetailsController {
 
     private final UserDetailsService userDetailsService;
 
-    //    todo: add exception handler
-
-    //    todo:swagger
-    //    @ApiOperation(value = "")
     @GetMapping(value = "/{login}")
     public UserDetailsResponse getUserDetails(@PathVariable final String login) throws CalculationsException {
         final User userDetails = userDetailsService.getUserDetails(login);
         return UserDetailsResponse.valueOf(userDetails);
+    }
+
+    @ExceptionHandler(value = CalculationsException.class)
+    ResponseEntity<ErrorResponse> handleCalculationsException(final CalculationsException exception) {
+        final HttpStatus statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        final ErrorResponse errorResponse = new ErrorResponse(statusCode, exception.getMessage());
+        return new ResponseEntity<>(errorResponse, statusCode);
+    }
+
+    @ExceptionHandler(value = HttpClientErrorException.class)
+    ResponseEntity<ErrorResponse> handleHttpClientErrorException(final HttpClientErrorException exception) {
+        final HttpStatus statusCode = exception.getStatusCode();
+        final ErrorResponse errorResponse = new ErrorResponse(statusCode, exception.getMessage());
+        return new ResponseEntity<>(errorResponse, statusCode);
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
