@@ -1,7 +1,7 @@
 # Project description
 
-Simple backend application that allows to read Github user's information. It also stores the request statistics and performs some additional
-calculations.
+Simple backend application that allows to read Github user's information. It also stores the request statistics and
+performs some additional calculations.
 
 # Running the project locally
 
@@ -13,12 +13,14 @@ In order to run the whole environment locally simply execute
 The application will be available with a Swagger API documentation on http://localhost:8080/swagger-ui/index.html
 
 ## Running from Gradle or IntelliJ
-### Application
-In order to run the application locally, a *local* profile should configured.
-It' used automatically when running the `bootRun` gradle task.
 
+### Application
+
+In order to run the application locally, a *local* profile should configured. It' used automatically when running
+the `bootRun` gradle task.
 
 ### Database
+
 Running application this way requires additional dependency of PostgreSQL database.
 
 A docker container with Postgres database can be run with:
@@ -39,3 +41,11 @@ CREATE DATABASE github;
 ```
 
 The database schema will be updated after running the application with `./gradlew bootrun`
+
+### IDE configuration
+
+Additionally, annotation processing should be enabled in the IntelliJ IDEA to correctly interpret the Lombok
+annotations.
+
+It can be done by checking *Enable annotation processing* in project settings (ctrl + shitf + a -> "Enable annotation
+processing").
